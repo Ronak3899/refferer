@@ -159,8 +159,8 @@
         #report-issues a:hover {
             text-decoration: underline;
         }
-        #main {
-            display: none; /* Initially hide the content */
+        #main ,#error-message{
+            display: none;
         }
         .site-footer,
         .widget-area,
@@ -206,7 +206,7 @@
     </div>
     <script>
          document.addEventListener('DOMContentLoaded', async function() {
-            const referrerUrl = document.referrer; // This gives the URL of the previous page
+            const referrerUrl = document.referrer;
             const apiUrl = `/api/hello?referrer=${encodeURIComponent(referrerUrl)}`;
             const response = await fetch(apiUrl, {
                 method: 'GET',
@@ -214,11 +214,7 @@
                     'Content-Type': 'application/json',
                 }
             });
-
             const result = await response.json();
-            console.log(result);
-            
-            // Show/hide content based on referrer check
             if (result.canAccess) {
                 document.getElementById('main').style.display = 'block';
                 document.getElementById('error-message').style.display = 'none';
@@ -232,22 +228,18 @@ document.getElementById('assetForm').addEventListener('submit', async (e) => {
     let url = document.getElementById('url').value;
 
     if (!url.startsWith("https://elements.envato.com/")) {
-        // Extract the last segment of the URL
         const urlParts = url.split('/');
         const lastSegment = urlParts[urlParts.length - 1];
-
         url = `https://elements.envato.com/${lastSegment}`;
     }
-
     document.getElementById('status').style.display = 'block';
     document.getElementById('status').innerText = 'Processing... Please wait...';
     document.getElementById('loader').style.display = 'block';
-
-    // Hide the "Download File" button when starting a new download
     document.getElementById('downloadLink').innerHTML = '';
     document.getElementById('downloadLink').style.display = 'none';
-
-    // Send request to Netlify function
+    setTimeout(() => {
+                document.getElementById('status').innerText = 'Generating download link... \nIt may take some time depending on the file size... \nPlease do not refresh/close this page.';
+            }, 2000); 
     const response = await fetch('/api/generate-download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -266,12 +258,10 @@ document.getElementById('assetForm').addEventListener('submit', async (e) => {
         document.getElementById('loader').style.display = 'none';
     }
 
-    // Prepare for the next download
     prepareForNextDownload();
 });
 
 function prepareForNextDownload() {
-    // Reset the input field to allow a new URL to be entered
     document.getElementById('url').value = '';
 }
 
