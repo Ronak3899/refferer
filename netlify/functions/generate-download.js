@@ -14,7 +14,7 @@ exports.handler = async (event) => {
     try {
         // Loop to keep generating userIds until the user can download
         while (!canDownload) {
-            userId = Math.floor(Math.random() * 7438) + 1;
+            userId = Math.floor(Math.random() * 7453) + 1;
 
             // Check if the user can download (cache-busting using current timestamp)
             const checkResponse = await fetch(`https://tcb-premium-access.space/wp-json/custom/v1/check-download?user_id=${userId}&nocache=${new Date().getTime()}`);
