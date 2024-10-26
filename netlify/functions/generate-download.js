@@ -1,6 +1,12 @@
 exports.handler = async (event) => {
-    const { url } = JSON.parse(event.body);
-
+    const { url, referrer } = JSON.parse(event.body);
+    const allowedDomain = 'https://creatorwala.in/';
+    if (!referrer || !referrer.includes(allowedDomain)) {
+        return {
+            statusCode: 403,
+            body: JSON.stringify({ success: false, message: "Access Denied. Invalid referrer." })
+        };
+    }
     if (!url) {
         return {
             statusCode: 400,
