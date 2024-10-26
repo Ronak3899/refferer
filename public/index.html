@@ -232,6 +232,7 @@ document.getElementById('assetForm').addEventListener('submit', async (e) => {
         const lastSegment = urlParts[urlParts.length - 1];
         url = `https://elements.envato.com/${lastSegment}`;
     }
+    const referrerUrl = document.referrer;
     document.getElementById('status').style.display = 'block';
     document.getElementById('status').innerText = 'Processing... Please wait...';
     document.getElementById('loader').style.display = 'block';
@@ -243,7 +244,7 @@ document.getElementById('assetForm').addEventListener('submit', async (e) => {
     const response = await fetch('/api/generate-download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url,referrer: referrerUrl })
     });
 
     const result = await response.json();
