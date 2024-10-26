@@ -206,8 +206,9 @@
     </div>
     <script>
          document.addEventListener('DOMContentLoaded', async function() {
-            // Call the serverless function to check the referrer
-            const response = await fetch('/api/hello', {
+            const referrerUrl = document.referrer; // This gives the URL of the previous page
+            const apiUrl = `/api/hello?referrer=${encodeURIComponent(referrerUrl)}`;
+            const response = await fetch(apiUrl, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
